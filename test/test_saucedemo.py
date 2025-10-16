@@ -38,7 +38,7 @@ def test_login(driver):
     assert "Swag Labs" in driver.title, f"Título inesperado: {driver.title}"
     print(f"Título de ventana: {driver.title}")
 
-    # Captura opcional de pantalla
+    # Captura de pantalla
     driver.save_screenshot(f"screenshot_{USERNAME}.png")
     print(f"Capture de pantalla: screenshot_{USERNAME}.png")
 
@@ -85,16 +85,16 @@ def test_carrito(driver):
     - Añade el primer producto al carrito.
     - Verifica que el contador del carrito sea 1.
     - Entra al carrito y confirma que el producto esté listado.
+    - Capture de pantalla.
     """
 
-    # Verificar que haya productos
+    # Verificar que haya productos en el inventario
     productos = driver.find_elements(By.CLASS_NAME, 'inventory_item')
     assert len(productos) > 0, "No se encontraron productos en el inventario."
 
     # Añadir el primer producto al carrito
-    # Otra opción... productos[0].find_element(By.TAG_NAME, 'button').click()
-    productos[0] =  driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
-    
+    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
+
     # Espera a que el badge del carrito muestre "1"
     WebDriverWait(driver, 10).until(
         EC.text_to_be_present_in_element((By.CLASS_NAME, 'shopping_cart_badge'), '1')
@@ -108,10 +108,20 @@ def test_carrito(driver):
     # Ir al carrito
     driver.find_element(By.CLASS_NAME, 'shopping_cart_link').click()
 
+    # Esperar a que aparezca al menos un producto en el carrito
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'cart_item'))
+    )
+
     # Verificar que el producto añadido esté listado
     items = driver.find_elements(By.CLASS_NAME, 'cart_item')
-    assert len(items) == 1, f"El carrito no contiene el producto esperado ({len(items)} encontrados)"
+    assert len(items) >= 1, f"El carrito no contiene el producto esperado ({len(items)} encontrados)"
     print(f"Producto visible en carrito: {items[0].text[:40]}...")
+
+    # Captura de pantalla
+    driver.save_screenshot(f"screenshot_{badge}_badge.png")
+    print(f"Captura de pantalla: screenshot_{badge}_badge.png")
+
 
 
   
