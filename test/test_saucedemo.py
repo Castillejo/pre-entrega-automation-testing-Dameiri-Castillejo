@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 
 from selenium.webdriver.common.by import By
-from utils.helpers import login_saucedeme, get_driver, USERNAME
+from utils.helpers import login_saucedeme, get_driver, USERNAME, USERSLISTA, loginlista
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -122,6 +122,29 @@ def test_carrito(driver):
     driver.save_screenshot(f"screenshot_{badge}_badge.png")
     print(f"Captura de pantalla: screenshot_{badge}_badge.png")
 
+# ============================================================
+# TEST 4: ACTIVIDAD EXTRA 4 - Login lista 
+# ============================================================
 
+@pytest.mark.login_lista # Ejecutar solo un subconjunto específico de tus pruebas
+@pytest.mark.parametrize("LISTA", USERSLISTA) # Para iterar
+def test_loginlista(driver, LISTA):
 
-  
+    """
+    Prueba el login con distintos tipos de usuarios.
+    Guarda captura de pantalla para cada caso.
+    """
+
+    resultado= loginlista(driver, LISTA)
+
+    if resultado == "bloqueado":
+        error_msg = driver.find_element(By.XPATH, "//h3[@data-test='error']").text
+        assert "locked out" in error_msg.lower()
+        print(f"{LISTA} - Usuario bloqueado correctamente detectado.")
+    else:
+        assert "/inventory.html" in driver.current_url, f"Fallo login con {LISTA}"
+        print(f"{LISTA} - Login exitoso.")
+
+    # Captura de pantalla
+    driver.save_screenshot(f"screenshot_{LISTA}.png")
+
