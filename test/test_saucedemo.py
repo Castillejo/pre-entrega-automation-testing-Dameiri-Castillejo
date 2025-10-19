@@ -122,6 +122,4 @@ def test_carrito(driver):
     driver.save_screenshot(f"screenshot_{badge}_badge.png")
     print(f"Captura de pantalla: screenshot_{badge}_badge.png")
 
-
-
   
