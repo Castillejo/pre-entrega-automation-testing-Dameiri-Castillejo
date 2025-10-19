@@ -15,11 +15,10 @@ Se validan tres flujos principales del sistema:
 ## Tecnologías utilizadas
 
 - **Python 3.13.17** (python --version)
-- **Selenium WebDriver**
-- **pytest**
-- **webdriver-manager** (para instalar automáticamente ChromeDriver)
+- **pytest** (prara realizar pruebas)
+- **webdriver-manager** (para realizar pruebas automatizadas ChromeDriver, detecta la ultima versión del navegador)
 - **pytest-html** (para generar reportes HTML de ejecución)
-- **Git para contrl de versionado** 
+- **Git** (para control de versionados)
 
 ---
 
@@ -42,6 +41,8 @@ pip install selenium pytest webdriver-manager pytest-html
 
 ## Comando para ejecutar pruebas 
 - **pytest -v** (Ejecutar todas las pruebas con salida detallada)
+- **pytest -v -s** (Deshabilita la captura de salida estándar y de errores por parte de pytest. Esta opción permite que los print() se muestren en la consola en tiempo real.)
+-**pytest -v -m** (Para correr solo el test marcado)
 - **pytest -v --html=reporte.html --self-contained-html** (Generar un reporte HTML de los resultados)
 
 
