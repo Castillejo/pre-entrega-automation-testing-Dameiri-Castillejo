@@ -42,7 +42,9 @@ pip install selenium pytest webdriver-manager pytest-html
 ## Comando para ejecutar pruebas 
 - **pytest -v** (Ejecutar todas las pruebas con salida detallada)
 - **pytest -v -s** (Deshabilita la captura de salida estándar y de errores por parte de pytest. Esta opción permite que los print() se muestren en la consola en tiempo real.)
--**pytest -v -m** (Para correr solo el test marcado)
+- **pytest -v -m** (Para correr solo el test marcado)
 - **pytest -v --html=reporte.html --self-contained-html** (Generar un reporte HTML de los resultados)
+- **pytest -m smoke --html=preentrega_pom.html** (Generar un reporte HTML marcado smoke de los resultados)
+
 
 
