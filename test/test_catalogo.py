@@ -1,6 +1,9 @@
 import pytest
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
+from selenium.webdriver.support.ui import WebDriverWait
+from conftest import URL
+
 
 @pytest.mark.smoke
 @pytest.mark.catalogo_POM
@@ -27,3 +30,13 @@ def test_catalogo(driver):
     nombre = inventory.obtener_nombre_producto(0)
     precio = inventory.obtener_precio_producto(0)
     print(f"Primer producto → {nombre} | Precio: {precio}")
+
+    # Cerrar sesión de manera confiable
+    inventory.logout()
+
+    # Esperar a que la URL vuelva a la de login
+    WebDriverWait(driver, 10).until(lambda d: URL in d.current_url)
+    assert URL in driver.current_url, "No se redirigió al login después del logout."
+    print("Logout exitoso")
+
+   

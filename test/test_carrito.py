@@ -3,6 +3,7 @@ from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 
+
 @pytest.mark.smoke
 @pytest.mark.carrito_POM
 def test_carrito(driver):
@@ -31,3 +32,9 @@ def test_carrito(driver):
     archivo = f"screenshot_{badge}_badge.png"
     driver.save_screenshot(archivo)
     print(f"Captura de pantalla guardada: {archivo}")
+
+
+
+
+
+

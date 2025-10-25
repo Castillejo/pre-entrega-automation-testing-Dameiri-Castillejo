@@ -10,6 +10,9 @@ class InventoryPage:
     _ADD_TO_CART_BUTTONS = (By.CSS_SELECTOR, "button[data-test*='add-to-cart']")
     _CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
     _CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
+    _URL_CURRENT = '/inventory.html'
+    _MENU_BUTTON = (By.ID, 'react-burger-menu-btn')
+    _LINK_BUTTON = (By.ID, 'logout_sidebar_link')
 
     def __init__(self, driver):
         self.driver = driver
@@ -22,7 +25,7 @@ class InventoryPage:
         return self.driver.title
 
     def esta_en_pagina_inventario(self):
-        return "inventory.html" in self.driver.current_url
+        return self._URL_CURRENT in self.driver.current_url
 
     def obtener_productos(self):
         return self.driver.find_elements(*self._PRODUCTS)
@@ -51,3 +54,15 @@ class InventoryPage:
 
     def ir_al_carrito(self):
         self.driver.find_element(*self._CART_LINK).click()
+
+    def logout(self):
+        # Esperar a que el botón del menú sea clickeable y hacer click
+        WebDriverWait(self.driver, 10).until(
+        EC.element_to_be_clickable(self._MENU_BUTTON)
+        ).click()
+
+        # Esperar a que el link de logout sea clickeable y hacer click
+        WebDriverWait(self.driver, 10).until(
+        EC.element_to_be_clickable(self._LINK_BUTTON)
+        ).click()
+
