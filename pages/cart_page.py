@@ -12,9 +12,16 @@ class CartPage:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
-
+    
     def esperar_productos_en_carrito(self):
-        self.wait.until(EC.presence_of_element_located(self._CART_ITEMS))
+        self.wait.until(EC.presence_of_all_elements_located(self._CART_ITEMS))
+
+    #def esperar_productos_en_carrito(self):
+        #self.wait.until(EC.presence_of_element_located(self._CART_ITEMS))
+
+    #def esperar_productos_en_carrito(self):
+       # print(f"[DEBUG] Esperando productos en carrito, URL actual: {self.driver.current_url}")
+       # self.wait.until(EC.visibility_of_all_elements_located(self._CART_ITEMS))
 
     def obtener_items(self):
         return self.driver.find_elements(*self._CART_ITEMS)
@@ -31,3 +38,6 @@ class CartPage:
                 descripcion = item.find_element(*self._ITEM_DESC).text
                 return {"nombre": nombre_item, "precio": precio, "descripcion": descripcion}
         return None
+    
+    
+

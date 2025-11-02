@@ -4,6 +4,9 @@ from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from utils.productos_json import get_productos_json
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def limpiar_nombre_archivo(nombre):
     """Eliminar caracteres que no se pueden usar en nombres de archivo"""
@@ -42,6 +45,11 @@ def test_carrito(driver, nombre, precio, descripcion):
 
     # Ir al carrito
     inventory.ir_al_carrito()
+
+   # Esperar a que la URL del carrito se cargue
+      
+    WebDriverWait(driver, 10).until(EC.url_contains("cart.html"))
+
     cart = CartPage(driver)
     cart.esperar_productos_en_carrito()
 
@@ -55,6 +63,14 @@ def test_carrito(driver, nombre, precio, descripcion):
     archivo = f"screenshot_{nombre_archivo}_badge{badge}.png"
     driver.save_screenshot(archivo)
     print(f"[INFO] Captura de pantalla guardada: {archivo}")
+
+
+
+
+
+
+
+
 
 
 

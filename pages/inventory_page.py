@@ -75,6 +75,25 @@ class InventoryPage:
         self.driver.find_element(*self._CART_LINK).click()
 
     def logout(self):
+         # Click en el menú usando JavaScript si hay overlay/animación
+         menu = self.wait.until(EC.element_to_be_clickable(self._MENU_BUTTON))
+         self.driver.execute_script("arguments[0].click();", menu)
+
+         # Esperar hasta que el link de logout sea visible y clickeable
+         logout_link = self.wait.until(EC.visibility_of_element_located(self._LINK_BUTTON))
+         self.driver.execute_script("arguments[0].click();", logout_link)
+
+"""
+    def logout(self):
+        # Esperar a que el botón del menú esté presente y visible
+        self.wait.until(EC.presence_of_element_located(self._MENU_BUTTON))
+        self.wait.until(EC.element_to_be_clickable(self._MENU_BUTTON)).click()
+
+        # Esperar a que el link de logout esté presente y visible
+        self.wait.until(EC.presence_of_element_located(self._LINK_BUTTON))
+        self.wait.until(EC.element_to_be_clickable(self._LINK_BUTTON)).click()
+
+    def logout(self):
         # Esperar a que el botón del menú sea clickeable y hacer click
         WebDriverWait(self.driver, 10).until(
         EC.element_to_be_clickable(self._MENU_BUTTON)
@@ -84,4 +103,5 @@ class InventoryPage:
         WebDriverWait(self.driver, 10).until(
         EC.element_to_be_clickable(self._LINK_BUTTON)
         ).click()
-
+"""
+    
