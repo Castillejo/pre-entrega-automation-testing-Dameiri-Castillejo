@@ -4,6 +4,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class CartPage:
     _CART_ITEMS = (By.CLASS_NAME, "cart_item")
+    _ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
+    _ITEM_PRICE = (By.CLASS_NAME, "inventory_item_price")
+    _ITEM_DESC = (By.CLASS_NAME, "inventory_item_desc") 
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -17,3 +21,13 @@ class CartPage:
 
     def contar_items(self):
         return len(self.obtener_items())
+    
+    def obtener_producto_por_nombre(self, nombre):
+        items = self.driver.find_elements(*self._CART_ITEMS)
+        for item in items:
+            nombre_item = item.find_element(*self._ITEM_NAME).text
+            if nombre_item == nombre:
+                precio = item.find_element(*self._ITEM_PRICE).text
+                descripcion = item.find_element(*self._ITEM_DESC).text
+                return {"nombre": nombre_item, "precio": precio, "descripcion": descripcion}
+        return None
