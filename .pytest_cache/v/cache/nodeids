@@ -5,6 +5,7 @@
   "test/test_catalogo.py::test_catalogo[Sauce Labs Backpack-29.99-carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.]",
   "test/test_catalogo.py::test_catalogo[Sauce Labs Bike Light-9.99-A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.]",
   "test/test_catalogo.py::test_catalogo[Sauce Labs Bolt T-Shirt-15.99-Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.]",
+  "test/test_checkout.py::test_checkout",
   "test/test_login.py::test_login[locked_out_user-secret_sauce-False]",
   "test/test_login.py::test_login[standard_user-secret_sauce-True]",
   "test/test_login.py::test_login[usuario_malo-password_malo-False]"
