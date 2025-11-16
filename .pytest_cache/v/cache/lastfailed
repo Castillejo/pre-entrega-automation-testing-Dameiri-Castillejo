@@ -1,3 +1,6 @@
 {
-  "test/test_checkout.py::test_checkout": true
+  "test/test_checkout1111.py::test_checkout": true,
+  "test/test_saucedemoCheck.py::test_checkout": true,
+  "test/test_checkout.py::test_checkout": true,
+  "test/test_carrito.py::test_carrito[Sauce Labs Bolt T-Shirt-15.99-Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.]": true
 }

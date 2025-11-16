@@ -1,71 +1,119 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 
-LONG_TIMEOUT = 15
+SHORT = 10
+LONG = 30
 
 class CheckoutPage:
-    _FIRST_NAME = (By.ID, "first-name")
-    _LAST_NAME = (By.ID, "last-name")
-    _ZIP_CODE = (By.ID, "postal-code")
-    _CONTINUE_BUTTON = (By.ID, "continue")
-    _FINISH_BUTTON = (By.ID, "finish")
 
     def __init__(self, driver):
         self.driver = driver
 
+    # --------- SELECTORES ----------
+    btn_checkout = (By.ID, "checkout")
+    input_first = (By.ID, "first-name")
+    input_last = (By.ID, "last-name")
+    input_zip = (By.ID, "postal-code")
+    btn_continue = (By.ID, "continue")
+    btn_finish = (By.ID, "finish")
+    msg_complete = (By.CLASS_NAME, "complete-header")
+
+    # --------- MÉTODOS ----------
     def iniciar_checkout(self):
-        checkout_btn = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.element_to_be_clickable((By.ID, "checkout"))
-        )
-        checkout_btn.click()
-        WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.url_contains("checkout-step-one.html")
-        )
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_checkout)
+        ).click()
 
-    def completar_formulario(self, first_name, last_name, zip_code):
-        # Esperar los campos
-        first_input = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.visibility_of_element_located(self._FIRST_NAME)
-        )
-        last_input = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.visibility_of_element_located(self._LAST_NAME)
-        )
-        zip_input = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.visibility_of_element_located(self._ZIP_CODE)
-        )
+    def completar_formulario(self, nombre, apellido, cp):
+        WebDriverWait(self.driver, SHORT).until(
+            EC.visibility_of_element_located(self.input_first)
+        ).send_keys(nombre)
 
-        # Función para React: setear valor y disparar evento change
-        def react_input(element, value):
-            self.driver.execute_script("""
-                const input = arguments[0];
-                const value = arguments[1];
-                input.focus();
-                input.value = value;
-                input.dispatchEvent(new Event('input', { bubbles: true }));
-                input.dispatchEvent(new Event('change', { bubbles: true }));
-            """, element, value)
-
-        react_input(first_input, first_name)
-        react_input(last_input, last_name)
-        react_input(zip_input, zip_code)
+        self.driver.find_element(*self.input_last).send_keys(apellido)
+        self.driver.find_element(*self.input_zip).send_keys(cp)
 
     def continuar_checkout(self):
-        continue_btn = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.element_to_be_clickable(self._CONTINUE_BUTTON)
-        )
-        ActionChains(self.driver).move_to_element(continue_btn).click().perform()
-        WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.url_contains("checkout-step-two.html")
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_continue)
+        ).click()
+        # Esperar que aparezca el botón FINISH
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_finish)
         )
 
     def finalizar_checkout(self):
-        finish_btn = WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.element_to_be_clickable(self._FINISH_BUTTON)
+        finish_button = WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_finish)
         )
-        ActionChains(self.driver).move_to_element(finish_btn).click().perform()
-        WebDriverWait(self.driver, LONG_TIMEOUT).until(
-            EC.url_contains("checkout-complete.html")
+        # Click robusto con JavaScript
+        self.driver.execute_script("arguments[0].click();", finish_button)
+
+    def obtener_mensaje_final(self):
+        # Esperar que el botón Finish desaparezca (seguridad)
+        WebDriverWait(self.driver, LONG).until(
+            EC.invisibility_of_element_located(self.btn_finish)
+        )
+        # Esperar mensaje final
+        mensaje_elem = WebDriverWait(self.driver, LONG).until(
+            EC.visibility_of_element_located(self.msg_complete)
+        )
+        return mensaje_elem.text
+    
+
+"""
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+SHORT = 10
+
+class CheckoutPage:
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    # --------- SELECTORES ----------
+    btn_checkout = (By.ID, "checkout")
+    input_first = (By.ID, "first-name")
+    input_last = (By.ID, "last-name")
+    input_zip = (By.ID, "postal-code")
+    btn_continue = (By.ID, "continue")
+    btn_finish = (By.ID, "finish")
+    msg_complete = (By.CLASS_NAME, "complete-header")
+
+    # --------- MÉTODOS ----------
+    def iniciar_checkout(self):
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_checkout)
+        ).click()
+
+    def completar_formulario(self, nombre, apellido, cp):
+        WebDriverWait(self.driver, SHORT).until(
+            EC.visibility_of_element_located(self.input_first)
+        ).send_keys(nombre)
+
+        self.driver.find_element(*self.input_last).send_keys(apellido)
+        self.driver.find_element(*self.input_zip).send_keys(cp)
+
+    def continuar_checkout(self):
+        # Hacer click en continue
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_continue)
+        ).click()
+
+        # Esperar que aparezca el botón FINISH (igual que tu test que funciona)
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_finish)
         )
 
+    def finalizar_checkout(self):
+        WebDriverWait(self.driver, SHORT).until(
+            EC.element_to_be_clickable(self.btn_finish)
+        ).click()
+
+    def obtener_mensaje_final(self):
+        return WebDriverWait(self.driver, SHORT).until(
+            EC.visibility_of_element_located(self.msg_complete)
+        ).text
+"""
